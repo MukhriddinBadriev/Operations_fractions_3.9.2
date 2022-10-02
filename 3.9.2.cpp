@@ -10,6 +10,7 @@ private:
 public:
 	Fraction(int numerator, int denominator)
 	{
+		
 		numerator_ = numerator;
 		if (denominator == 0) {
 			cout << "ОШИБКА: ПОПЫТКА ДЕЛИТЬ НА НОЛЬ" << endl;
@@ -17,35 +18,36 @@ public:
 		}
 		else denominator_ = denominator;
 	}
-	//double fract() { return double(numerator_ / denominator_); }
-	double operator +(Fraction other) {
-		return double(numerator_ * other.denominator_ + denominator_ * other.numerator_) / 
-			(denominator_ * other.denominator_);
+	
+	Fraction operator+(Fraction other) {
+		return Fraction((numerator_ * other.denominator_ + denominator_ * other.numerator_),(denominator_ * other.denominator_));
 	}
-	double operator -(Fraction other) {
-		return double(numerator_ * other.denominator_ - denominator_ * other.numerator_) /
-			(denominator_ * other.denominator_);
+	Fraction operator-(Fraction other) {
+		return Fraction((numerator_ * other.denominator_ - denominator_ * other.numerator_) ,
+			(denominator_ * other.denominator_));
 	}
-	double operator *(Fraction other) {
-		return double(numerator_ * other.numerator_) / (denominator_ * other.denominator_);
+	Fraction operator*(Fraction other) {
+		return Fraction((numerator_ * other.numerator_) , (denominator_ * other.denominator_));
 	}
-	double operator /(Fraction other) {
-		return double(numerator_ *other.denominator_ ) / double(other.numerator_ * denominator_);
+	Fraction operator/(Fraction other) {
+		return Fraction((numerator_ *other.denominator_ ) , (other.numerator_ * denominator_));
 	}
-	Fraction& operator++() { numerator_+denominator_; denominator_; return *this; }
+	Fraction& operator++() { numerator_ += denominator_; denominator_; return *this; }
 	Fraction operator++(int)
 	{
-		Fraction temp = *this;
-		++(*this);
+		Fraction temp(numerator_, denominator_);
+		numerator_= numerator_ + denominator_;
+		//denominator_ = denominator_;
 		return temp;
 	}
-	Fraction& operator--() { numerator_- denominator_; denominator_; return *this; }
+	Fraction& operator--() { numerator_-= denominator_; denominator_; return *this; }
 	Fraction operator--(int)
 	{
-		Fraction temp = *this;
-		--(*this);
+		Fraction temp(numerator_, denominator_);
+		numerator_ = numerator_ - denominator_;
 		return temp;
 	}
+	
 	friend ostream& operator<<(ostream& os, const Fraction& dt);
 };
 
@@ -73,8 +75,8 @@ int main()
 
 	Fraction f1(numerator_1, denominator_1);
 	Fraction f2(numerator_2, denominator_2);
-
-	cout << numerator_1 << "/" << denominator_1 << " + " << numerator_2 << "/" << denominator_2 << " = "; cout << f1 + f2 << endl;
+	
+	cout << numerator_1 << "/" << denominator_1 << " + " << numerator_2 << "/" << denominator_2 << " = " << (f1 + f2) << endl;
 	cout << numerator_1 << "/" << denominator_1 << " - " << numerator_2 << "/" << denominator_2 << " = " << (f1 - f2) << endl;
 	cout << numerator_1 << "/" << denominator_1 << " * " << numerator_2 << "/" << denominator_2 << " = " << (f1 * f2) << endl;
 	cout << numerator_1 << "/" << denominator_1 << " / " << numerator_2 << "/" << denominator_2 << " = " << (f1 / f2) << endl;

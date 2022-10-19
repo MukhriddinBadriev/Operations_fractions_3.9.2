@@ -10,7 +10,7 @@ private:
 public:
 	Fraction(int numerator, int denominator)
 	{
-		
+
 		numerator_ = numerator;
 		if (denominator == 0) {
 			cout << "ОШИБКА: ПОПЫТКА ДЕЛИТЬ НА НОЛЬ" << endl;
@@ -18,36 +18,94 @@ public:
 		}
 		else denominator_ = denominator;
 	}
-	
+
 	Fraction operator+(Fraction other) {
-		return Fraction((numerator_ * other.denominator_ + denominator_ * other.numerator_),(denominator_ * other.denominator_));
+		if ((numerator_ * other.denominator_ + denominator_ * other.numerator_) <= (denominator_ * other.denominator_)) {
+			for (int i = (numerator_ * other.denominator_ + denominator_ * other.numerator_); i >=2 ; i--) {
+				if ((numerator_ * other.denominator_ + denominator_ * other.numerator_) % i == 0 && (denominator_ * other.denominator_) % i == 0) {
+					return Fraction((numerator_ * other.denominator_ + denominator_ * other.numerator_) / i, (denominator_ * other.denominator_) / i);
+				}
+			}
+		}
+		else {
+			for (int i = (denominator_ * other.denominator_); i >=2 ; i--) {
+				if ((numerator_ * other.denominator_ + denominator_ * other.numerator_) % i == 0 && (denominator_ * other.denominator_) % i == 0) {
+					return Fraction((numerator_ * other.denominator_ + denominator_ * other.numerator_) / i, (denominator_ * other.denominator_) / i);
+				}
+			}
+		}
+		return Fraction((numerator_ * other.denominator_ + denominator_ * other.numerator_) , (denominator_ * other.denominator_) );
 	}
 	Fraction operator-(Fraction other) {
-		return Fraction((numerator_ * other.denominator_ - denominator_ * other.numerator_) ,
+		if ((numerator_ * other.denominator_ - denominator_ * other.numerator_) <= (denominator_ * other.denominator_)) {
+			for (int i = (numerator_ * other.denominator_ - denominator_ * other.numerator_); i>=2; i--) {
+				if ((numerator_ * other.denominator_ - denominator_ * other.numerator_) % i == 0 && (denominator_ * other.denominator_) % i == 0) {
+					return Fraction((numerator_ * other.denominator_ - denominator_ * other.numerator_)/i,
+						(denominator_ * other.denominator_)/i);
+				}
+			}
+		}
+		else  {
+			for (int i = (denominator_ * other.denominator_); i >=2 ; i--) {
+				if ((numerator_ * other.denominator_ + denominator_ * other.numerator_) % i == 0 && (denominator_ * other.denominator_) % i == 0) {
+					return Fraction((numerator_ * other.denominator_ - denominator_ * other.numerator_)/i,
+						(denominator_ * other.denominator_)/i);
+				}
+			}
+		}
+		return Fraction((numerator_ * other.denominator_ - denominator_ * other.numerator_),
 			(denominator_ * other.denominator_));
 	}
 	Fraction operator*(Fraction other) {
-		return Fraction((numerator_ * other.numerator_) , (denominator_ * other.denominator_));
+		if ((numerator_ * other.numerator_) <= (denominator_ * other.denominator_)) {
+			for (int i = (numerator_ * other.numerator_); i >=2 ; i--) {
+				if ((numerator_ * other.numerator_) % i == 0 && (denominator_ * other.denominator_) % i == 0) {
+					return Fraction((numerator_ * other.numerator_)/i, (denominator_ * other.denominator_)/i);
+				}
+			}
+		}
+		else {
+			for (int i = (denominator_ * other.denominator_); i >=2 ; i--) {
+				if ((numerator_ *other.numerator_) % i == 0 && (denominator_ * other.denominator_) % i == 0) {
+					return Fraction((numerator_ * other.numerator_)/i, (denominator_ * other.denominator_) / i);
+				}
+			}
+		}
+		return Fraction((numerator_ * other.numerator_), (denominator_ * other.denominator_));
 	}
 	Fraction operator/(Fraction other) {
-		return Fraction((numerator_ *other.denominator_ ) , (other.numerator_ * denominator_));
+		if ((numerator_ * other.denominator_) <= (other.numerator_ * denominator_)) {
+			for (int i = (numerator_ * other.denominator_); i >=2 ; i--) {
+				if ((numerator_ * other.denominator_) % i == 0 && (other.numerator_ * denominator_) % i == 0) {
+					return Fraction((numerator_ * other.denominator_)/i, (other.numerator_ * denominator_)/i);
+				}
+			}
+		}
+		else {
+			for (int i = (other.numerator_ * denominator_); i >=2 ; i--) {
+				if ((numerator_ * other.denominator_ + denominator_ * other.numerator_) % i == 0 && (denominator_ * other.denominator_) % i == 0) {
+					return Fraction((numerator_ * other.denominator_)/i, (other.numerator_ * denominator_)/i);
+				}
+			}
+		}
+		return Fraction((numerator_ * other.denominator_), (other.numerator_ * denominator_));
 	}
 	Fraction& operator++() { numerator_ += denominator_; denominator_; return *this; }
 	Fraction operator++(int)
 	{
 		Fraction temp(numerator_, denominator_);
-		numerator_= numerator_ + denominator_;
+		numerator_ = numerator_ + denominator_;
 		//denominator_ = denominator_;
 		return temp;
 	}
-	Fraction& operator--() { numerator_-= denominator_; denominator_; return *this; }
+	Fraction& operator--() { numerator_ -= denominator_; denominator_; return *this; }
 	Fraction operator--(int)
 	{
 		Fraction temp(numerator_, denominator_);
 		numerator_ = numerator_ - denominator_;
 		return temp;
 	}
-	
+
 	friend ostream& operator<<(ostream& os, const Fraction& dt);
 };
 
